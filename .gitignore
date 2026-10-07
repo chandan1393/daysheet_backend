@@ -1,0 +1,12 @@
+target/
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+uploads/
+*.log
+.env
+# Spring Boot local development config
+application-dev.properties
