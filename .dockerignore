@@ -1,0 +1,8 @@
+target/
+.idea/
+*.iml
+.git
+.env
+.env.*
+*.pem
+*.key
