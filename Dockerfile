@@ -3,16 +3,12 @@ FROM maven:3.9-eclipse-temurin-21 AS build
 
 WORKDIR /src
 
-# Copy pom first for Docker layer caching
 COPY pom.xml .
 
-# Download dependencies
 RUN mvn -q dependency:go-offline
 
-# Copy source code
 COPY src ./src
 
-# Build application
 RUN mvn -q package -DskipTests
 
 
@@ -24,13 +20,16 @@ WORKDIR /app
 # Create non-root user
 RUN useradd --system --uid 10001 app
 
-# Copy generated JAR
+# Create application storage directory
+RUN mkdir -p /var/lib/daysheet \
+    && chown -R app:app /var/lib/daysheet
+
+# Copy application
 COPY --from=build /src/target/*.jar app.jar
 
 # Run as non-root user
 USER app
 
-# Spring profile
 ENV SPRING_PROFILES_ACTIVE=prod
 
 EXPOSE 8080
